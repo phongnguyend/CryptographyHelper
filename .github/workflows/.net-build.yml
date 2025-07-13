@@ -25,6 +25,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 8.0.100
+
+    - name: Test
+      run: dotnet test CryptographyHelper.Tests/CryptographyHelper.Tests.csproj
+
     - name: Build
       run: dotnet build --configuration Release 
 
