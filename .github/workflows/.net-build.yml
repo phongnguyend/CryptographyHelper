@@ -27,7 +27,7 @@ jobs:
         dotnet-version: 8.0.100
 
     - name: Test
-      run: dotnet test CryptographyHelper.Tests/CryptographyHelper.Tests.csproj
+      run: dotnet test CryptographyHelper.Tests/CryptographyHelper.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 
     - name: Build
       run: dotnet build --configuration Release 
