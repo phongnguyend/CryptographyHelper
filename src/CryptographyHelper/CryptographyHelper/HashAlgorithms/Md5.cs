@@ -17,6 +17,6 @@ public class Md5 : Hash
 
     protected override HashAlgorithm GetHashAlgorithm()
     {
-        return _key == null ? MD5.Create() : (HashAlgorithm)new HMACMD5(_key);
+        return _key == null ? MD5.Create() : new HMACMD5(_key);
     }
 }

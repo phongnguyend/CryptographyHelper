@@ -17,6 +17,6 @@ public class Sha1 : Hash
 
     protected override HashAlgorithm GetHashAlgorithm()
     {
-        return _key == null ? SHA1.Create() : (HashAlgorithm)new HMACSHA1(_key);
+        return _key == null ? SHA1.Create() : new HMACSHA1(_key);
     }
 }

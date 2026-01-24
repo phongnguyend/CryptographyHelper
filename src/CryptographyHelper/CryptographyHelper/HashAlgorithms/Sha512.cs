@@ -17,6 +17,6 @@ public class Sha512 : Hash
 
     protected override HashAlgorithm GetHashAlgorithm()
     {
-        return _key == null ? SHA512.Create() : (HashAlgorithm)new HMACSHA512(_key);
+        return _key == null ? SHA512.Create() : new HMACSHA512(_key);
     }
 }

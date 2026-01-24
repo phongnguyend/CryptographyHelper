@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Security.Cryptography;
 
 namespace CryptographyHelper.HashAlgorithms;
@@ -31,35 +32,26 @@ public abstract class Hash
 
     public byte[] ComputeHash()
     {
-        using (var algorithm = GetHashAlgorithm())
+        using var algorithm = GetHashAlgorithm();
+        if (_fileToBeHashed != null)
         {
-            if (_fileToBeHashed != null)
-            {
-                using (var stream = File.Open(_fileToBeHashed.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    return algorithm.ComputeHash(stream);
-                }
-            }
-
-            return _streamToBeHashed != null
-                ? algorithm.ComputeHash(_streamToBeHashed)
-                : algorithm.ComputeHash(_bytesToBeHashed);
+            using var stream = File.Open(_fileToBeHashed.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            return algorithm.ComputeHash(stream);
         }
+
+        return _streamToBeHashed != null
+            ? algorithm.ComputeHash(_streamToBeHashed)
+            : algorithm.ComputeHash(_bytesToBeHashed);
     }
 
     public string ComputeHashedString(StringFormat returnFormat = StringFormat.Hex)
     {
-        switch (returnFormat)
+        return returnFormat switch
         {
-            case StringFormat.Hex:
-                return ComputeHash().ToHexString();
-            case StringFormat.Base64:
-                return ComputeHash().ToBase64String();
-            default:
-                break;
-        }
-
-        return null; // TODO: throw UnreachableException() instead
+            StringFormat.Hex => ComputeHash().ToHexString(),
+            StringFormat.Base64 => ComputeHash().ToBase64String(),
+            _ => throw new UnreachableException(),
+        };
     }
 
     public enum StringFormat

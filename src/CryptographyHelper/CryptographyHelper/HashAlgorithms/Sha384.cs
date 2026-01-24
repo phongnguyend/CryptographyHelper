@@ -17,6 +17,6 @@ public class Sha384 : Hash
 
     protected override HashAlgorithm GetHashAlgorithm()
     {
-        return _key == null ? SHA384.Create() : (HashAlgorithm)new HMACSHA384(_key);
+        return _key == null ? SHA384.Create() : new HMACSHA384(_key);
     }
 }

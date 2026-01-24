@@ -17,6 +17,6 @@ public class Sha256 : Hash
 
     protected override HashAlgorithm GetHashAlgorithm()
     {
-        return _key == null ? SHA256.Create() : (HashAlgorithm)new HMACSHA256(_key);
+        return _key == null ? SHA256.Create() : new HMACSHA256(_key);
     }
 }
