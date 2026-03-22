@@ -8,14 +8,14 @@ public class RSACrypto
     public static string GenerateKey(int size = 1024)
     {
         using var crypto = new RSACryptoServiceProvider(size);
-        return crypto.ToXmlString2(true);
+        return crypto.ToXmlString(true);
     }
 
     public static string ExportPublicKey(string keyXml)
     {
         using var crypto = new RSACryptoServiceProvider();
-        crypto.FromXmlString2(keyXml);
-        return crypto.ToXmlString2(false);
+        crypto.FromXmlString(keyXml);
+        return crypto.ToXmlString(false);
     }
 
     X509Certificate2 _cert;
@@ -29,7 +29,7 @@ public class RSACrypto
         if (format == KeyFormat.Xml)
         {
             crypto = new RSACryptoServiceProvider();
-            crypto.FromXmlString2(key);
+            crypto.FromXmlString(key);
         }
         else if (format == KeyFormat.Pem)
         {
