@@ -59,38 +59,68 @@ public class RSACrypto
 
     public byte[] Encrypt()
     {
+        return Encrypt(RSAEncryptionPadding.Pkcs1);
+    }
+
+    public byte[] Encrypt(RSAEncryptionPadding padding)
+    {
         using var crypto = _cert != null ? _cert.GetRSAPublicKey() : _crypto;
-        return crypto.Encrypt(_data, RSAEncryptionPadding.Pkcs1);
+        return crypto.Encrypt(_data, padding);
     }
 
     public byte[] Decrypt()
     {
+        return Decrypt(RSAEncryptionPadding.Pkcs1);
+    }
+
+    public byte[] Decrypt(RSAEncryptionPadding padding)
+    {
         using var crypto = _cert != null ? _cert.GetRSAPrivateKey() : _crypto;
-        return crypto.Decrypt(_data, RSAEncryptionPadding.Pkcs1);
+        return crypto.Decrypt(_data, padding);
     }
 
     public byte[] SignHash(HashAlgorithmName hashAlgorithmName)
     {
+        return SignHash(hashAlgorithmName, RSASignaturePadding.Pkcs1);
+    }
+
+    public byte[] SignHash(HashAlgorithmName hashAlgorithmName, RSASignaturePadding padding)
+    {
         using var crypto = _cert != null ? _cert.GetRSAPrivateKey() : _crypto;
-        return crypto.SignHash(_data, hashAlgorithmName, RSASignaturePadding.Pkcs1);
+        return crypto.SignHash(_data, hashAlgorithmName, padding);
     }
 
     public bool VerifyHash(byte[] signature, HashAlgorithmName hashAlgorithmName)
     {
+        return VerifyHash(signature, hashAlgorithmName, RSASignaturePadding.Pkcs1);
+    }
+
+    public bool VerifyHash(byte[] signature, HashAlgorithmName hashAlgorithmName, RSASignaturePadding padding)
+    {
         using var crypto = _cert != null ? _cert.GetRSAPublicKey() : _crypto;
-        return crypto.VerifyHash(_data, signature, hashAlgorithmName, RSASignaturePadding.Pkcs1);
+        return crypto.VerifyHash(_data, signature, hashAlgorithmName, padding);
     }
 
     public byte[] SignData(HashAlgorithmName hashAlgorithmName)
     {
+        return SignData(hashAlgorithmName, RSASignaturePadding.Pkcs1);
+    }
+
+    public byte[] SignData(HashAlgorithmName hashAlgorithmName, RSASignaturePadding padding)
+    {
         using var crypto = _cert != null ? _cert.GetRSAPrivateKey() : _crypto;
-        return crypto.SignData(_data, hashAlgorithmName, RSASignaturePadding.Pkcs1);
+        return crypto.SignData(_data, hashAlgorithmName, padding);
     }
 
     public bool VerifyData(byte[] signature, HashAlgorithmName hashAlgorithmName)
     {
+        return VerifyData(signature, hashAlgorithmName, RSASignaturePadding.Pkcs1);
+    }
+
+    public bool VerifyData(byte[] signature, HashAlgorithmName hashAlgorithmName, RSASignaturePadding padding)
+    {
         using var crypto = _cert != null ? _cert.GetRSAPublicKey() : _crypto;
-        return crypto.VerifyData(_data, signature, hashAlgorithmName, RSASignaturePadding.Pkcs1);
+        return crypto.VerifyData(_data, signature, hashAlgorithmName, padding);
     }
 }
 
