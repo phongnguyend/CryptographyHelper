@@ -27,11 +27,6 @@ public static class StringExtensions
         return data.GetBytes().UseSha512();
     }
 
-    public static PBKDF2 UsePBKDF2(this string password, int saltSize, int iterations)
-    {
-        return new PBKDF2(password).WithSalt(saltSize).WithIterations(iterations);
-    }
-
     public static PBKDF2 UsePBKDF2(this string password, byte[] salt, int iterations)
     {
         return new PBKDF2(password).WithSalt(salt).WithIterations(iterations);

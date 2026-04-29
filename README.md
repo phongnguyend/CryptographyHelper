@@ -80,24 +80,17 @@ var hashed = "Original Message to hash".UseSha512().WithKey(key).ComputeHash().T
 
 ### PBKDF2 (Password-Based Key Derivation)
 
-Derive a cryptographic key from a password using `PBKDF2`. You can provide a salt as a `byte[]` or as a generated salt size (int), set the number of iterations, and optionally choose a hash algorithm.
+Derive a cryptographic key from a password using `PBKDF2`. You can provide a salt as a `byte[]`, set the number of iterations, and optionally choose a hash algorithm.
 
 ```csharp
 using CryptographyHelper.HashAlgorithms;
 using System.Security.Cryptography;
 
-// Using an existing salt
 var salt = "65QuFYgSxqIW0d9Y/QKRX9veWK0DOyX0g7+nbr9yux8=".FromBase64String();
 var key = "MyVeryComplexPassword"
     .UsePBKDF2(salt, iterations: 500000)
     .GetBytes(32)
     .ToBase64String();
-
-// Using a generated salt size
-var key = "MyVeryComplexPassword"
-    .UsePBKDF2(saltSize: 16, iterations: 100000)
-    .WithHashAlgorithm(HashAlgorithmName.SHA256)
-    .GetBytes(32);
 ```
 
 ---
