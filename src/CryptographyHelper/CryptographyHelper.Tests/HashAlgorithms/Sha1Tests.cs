@@ -5,57 +5,57 @@ namespace CryptographyHelper.Tests.HashAlgorithms;
 
 public class Sha1Tests
 {
-    [Fact]
-    public void HashString()
+    [Theory]
+    [InlineData("Original Message to hash", "3882994BFCD293B6070D78A9DB0690E3BD18364F")]
+    public void HashString(string originalMessage, string expected)
     {
-        // Arrange
-        const string originalMessage = "Original Message to hash";
-
         // Act
         var hashed = originalMessage.UseSha1().ComputeHash().ToHexString();
 
         // Assert
-        Assert.Equal("3882994BFCD293B6070D78A9DB0690E3BD18364F", hashed);
+        Assert.Equal(expected, hashed);
     }
 
-    [Fact]
-    public void HashBytes()
+    [Theory]
+    [InlineData("Original Message to hash", "3882994BFCD293B6070D78A9DB0690E3BD18364F")]
+    public void HashBytes(string originalMessage, string expected)
     {
         // Arrange
-        byte[] originalMessage = "Original Message to hash".GetBytes();
+        var originalBytes = originalMessage.GetBytes();
 
         // Act
-        var hashed = originalMessage.UseSha1().ComputeHash().ToHexString();
+        var hashed = originalBytes.UseSha1().ComputeHash().ToHexString();
 
         // Assert
-        Assert.Equal("3882994BFCD293B6070D78A9DB0690E3BD18364F", hashed);
+        Assert.Equal(expected, hashed);
     }
 
-    [Fact]
-    public void HashStringWithKey()
+    [Theory]
+    [InlineData("Original Message to hash", "myscretekey", "75E1EF7CF7645DA619BF6A2594B64843DE6690BD")]
+    public void HashStringWithKey(string originalMessage, string keyValue, string expected)
     {
         // Arrange
-        const string originalMessage = "Original Message to hash";
-        var key = "myscretekey".GetBytes();
+        var key = keyValue.GetBytes();
 
         // Act
         var hashed = originalMessage.UseSha1().WithKey(key).ComputeHash().ToHexString();
 
         // Assert
-        Assert.Equal("75E1EF7CF7645DA619BF6A2594B64843DE6690BD", hashed);
+        Assert.Equal(expected, hashed);
     }
 
-    [Fact]
-    public void HashBytesWithKey()
+    [Theory]
+    [InlineData("Original Message to hash", "myscretekey", "75E1EF7CF7645DA619BF6A2594B64843DE6690BD")]
+    public void HashBytesWithKey(string originalMessage, string keyValue, string expected)
     {
         // Arrange
-        byte[] originalMessage = "Original Message to hash".GetBytes();
-        var key = "myscretekey".GetBytes();
+        var originalBytes = originalMessage.GetBytes();
+        var key = keyValue.GetBytes();
 
         // Act
-        var hashed = originalMessage.UseSha1().WithKey(key).ComputeHash().ToHexString();
+        var hashed = originalBytes.UseSha1().WithKey(key).ComputeHash().ToHexString();
 
         // Assert
-        Assert.Equal("75E1EF7CF7645DA619BF6A2594B64843DE6690BD", hashed);
+        Assert.Equal(expected, hashed);
     }
 }

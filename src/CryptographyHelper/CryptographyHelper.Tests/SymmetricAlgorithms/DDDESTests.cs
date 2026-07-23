@@ -8,55 +8,93 @@ namespace CryptographyHelper.Tests.SymmetricAlgorithms;
 
 public class DDDESTests
 {
-    [Fact]
-    public void Encrypt()
+    [Theory]
+    [InlineData(
+        "Text to encrypt",
+        "e0x8U5MyotKHiY1uxqxurg==",
+        "Z1kmtPGvz1g=",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "BMAQOzU6W/qAZBoRMlauWg==")]
+    public void Encrypt(
+        string original,
+        string keyBase64,
+        string ivBase64,
+        CipherMode cipherMode,
+        PaddingMode paddingMode,
+        string expected)
     {
         // Arrange
-        const string original = "Text to encrypt";
-        var key = "e0x8U5MyotKHiY1uxqxurg==".FromBase64String();
-        var iv = "Z1kmtPGvz1g=".FromBase64String();
+        var key = keyBase64.FromBase64String();
+        var iv = ivBase64.FromBase64String();
 
         // Act
         var encrypted = original
             .UseTripleDES(key)
-            .WithCipher(CipherMode.ECB)
-            .WithPadding(PaddingMode.PKCS7)
+            .WithCipher(cipherMode)
+            .WithPadding(paddingMode)
             .WithIV(iv)
             .Encrypt();
 
         // Assert
-        Assert.Equal("BMAQOzU6W/qAZBoRMlauWg==", encrypted.ToBase64String());
+        Assert.Equal(expected, encrypted.ToBase64String());
     }
 
-    [Fact]
-    public void Decrypt()
+    [Theory]
+    [InlineData(
+        "BMAQOzU6W/qAZBoRMlauWg==",
+        "e0x8U5MyotKHiY1uxqxurg==",
+        "Z1kmtPGvz1g=",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "Text to encrypt")]
+    public void Decrypt(
+        string encryptedBase64,
+        string keyBase64,
+        string ivBase64,
+        CipherMode cipherMode,
+        PaddingMode paddingMode,
+        string expected)
     {
         // Arrange
-        var encrypted = "BMAQOzU6W/qAZBoRMlauWg==".FromBase64String();
-        var key = "e0x8U5MyotKHiY1uxqxurg==".FromBase64String();
-        var iv = "Z1kmtPGvz1g=".FromBase64String();
+        var encrypted = encryptedBase64.FromBase64String();
+        var key = keyBase64.FromBase64String();
+        var iv = ivBase64.FromBase64String();
 
         // Act
         var decrypted = encrypted
             .UseTripleDES(key)
-            .WithCipher(CipherMode.ECB)
-            .WithPadding(PaddingMode.PKCS7)
+            .WithCipher(cipherMode)
+            .WithPadding(paddingMode)
             .WithIV(iv)
             .Decrypt();
         
         // Assert
-        Assert.Equal("Text to encrypt", decrypted.GetString());
+        Assert.Equal(expected, decrypted.GetString());
     }
 
-    [Fact]
-    public void EncryptDecryptFile()
+    [Theory]
+    [InlineData(
+        "e0x8U5MyotKHiY1uxqxurg==",
+        "Z1kmtPGvz1g=",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "E9BEF8A00841C82C52C35A512DAD8093",
+        "2DF2C5306B807D5817DAE37629973140")]
+    public void EncryptDecryptFile(
+        string keyBase64,
+        string ivBase64,
+        CipherMode cipherMode,
+        PaddingMode paddingMode,
+        string expectedOriginalHash,
+        string expectedEncryptedHash)
     {
         // Arrange
         const string originalFileName = "SymmetricAlgorithms/File.xlsx";
         const string encryptedFileName = "SymmetricAlgorithms/EncryptedDDDES.xlsx";
         const string decryptedFileName = "SymmetricAlgorithms/DecryptedDDDES.xlsx";
-        var key = "e0x8U5MyotKHiY1uxqxurg==".FromBase64String();
-        var iv = "Z1kmtPGvz1g=".FromBase64String();
+        var key = keyBase64.FromBase64String();
+        var iv = ivBase64.FromBase64String();
 
         // Act
         using var inputStream = File.OpenRead(originalFileName);
@@ -64,8 +102,8 @@ public class DDDESTests
         {
             inputStream
                 .UseTripleDES(key)
-                .WithCipher(CipherMode.ECB)
-                .WithPadding(PaddingMode.PKCS7)
+                .WithCipher(cipherMode)
+                .WithPadding(paddingMode)
                 .WithIV(iv)
                 .Encrypt(outputStream);
         }
@@ -75,8 +113,8 @@ public class DDDESTests
         {
             inputStream2
                 .UseTripleDES(key)
-                .WithCipher(CipherMode.ECB)
-                .WithPadding(PaddingMode.PKCS7)
+                .WithCipher(cipherMode)
+                .WithPadding(paddingMode)
                 .WithIV(iv)
                 .Decrypt(outputStream2);
         }
@@ -87,8 +125,8 @@ public class DDDESTests
 
         // Assert
         Assert.Equal(hashed1, hashed2);
-        Assert.Equal("E9BEF8A00841C82C52C35A512DAD8093", hashed1);
-        Assert.Equal("E9BEF8A00841C82C52C35A512DAD8093", hashed2);
-        Assert.Equal("2DF2C5306B807D5817DAE37629973140", hashed3);
+        Assert.Equal(expectedOriginalHash, hashed1);
+        Assert.Equal(expectedOriginalHash, hashed2);
+        Assert.Equal(expectedEncryptedHash, hashed3);
     }
 }

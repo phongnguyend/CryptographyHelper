@@ -8,55 +8,93 @@ namespace CryptographyHelper.Tests.SymmetricAlgorithms;
 
 public class DESTests
 {
-    [Fact]
-    public void Encrypt()
+    [Theory]
+    [InlineData(
+        "Text to encrypt",
+        "cmjP+yg9d3Q=",
+        "bFWtV5H1BDc=",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "faa7hXl/f/UVa+/ox02gDQ==")]
+    public void Encrypt(
+        string original,
+        string keyBase64,
+        string ivBase64,
+        CipherMode cipherMode,
+        PaddingMode paddingMode,
+        string expected)
     {
         // Arrange
-        const string original = "Text to encrypt";
-        var key = "cmjP+yg9d3Q=".FromBase64String();
-        var iv = "bFWtV5H1BDc=".FromBase64String();
+        var key = keyBase64.FromBase64String();
+        var iv = ivBase64.FromBase64String();
 
         // Act
         var encrypted = original
             .UseDES(key)
-            .WithCipher(CipherMode.ECB)
-            .WithPadding(PaddingMode.PKCS7)
+            .WithCipher(cipherMode)
+            .WithPadding(paddingMode)
             .WithIV(iv)
             .Encrypt();
 
         // Assert
-        Assert.Equal("faa7hXl/f/UVa+/ox02gDQ==", encrypted.ToBase64String());
+        Assert.Equal(expected, encrypted.ToBase64String());
     }
 
-    [Fact]
-    public void Decrypt()
+    [Theory]
+    [InlineData(
+        "faa7hXl/f/UVa+/ox02gDQ==",
+        "cmjP+yg9d3Q=",
+        "bFWtV5H1BDc=",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "Text to encrypt")]
+    public void Decrypt(
+        string encryptedBase64,
+        string keyBase64,
+        string ivBase64,
+        CipherMode cipherMode,
+        PaddingMode paddingMode,
+        string expected)
     {
         // Arrange
-        var encrypted = "faa7hXl/f/UVa+/ox02gDQ==".FromBase64String();
-        var key = "cmjP+yg9d3Q=".FromBase64String();
-        var iv = "bFWtV5H1BDc=".FromBase64String();
+        var encrypted = encryptedBase64.FromBase64String();
+        var key = keyBase64.FromBase64String();
+        var iv = ivBase64.FromBase64String();
 
         // Act
         var decrypted = encrypted
             .UseDES(key)
-            .WithCipher(CipherMode.ECB)
-            .WithPadding(PaddingMode.PKCS7)
+            .WithCipher(cipherMode)
+            .WithPadding(paddingMode)
             .WithIV(iv)
             .Decrypt();
 
         // Assert
-        Assert.Equal("Text to encrypt", decrypted.GetString());
+        Assert.Equal(expected, decrypted.GetString());
     }
 
-    [Fact]
-    public void EncryptDecryptFile()
+    [Theory]
+    [InlineData(
+        "cmjP+yg9d3Q=",
+        "bFWtV5H1BDc=",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "E9BEF8A00841C82C52C35A512DAD8093",
+        "37F4E82230402EEC16E1D26CB903CC73")]
+    public void EncryptDecryptFile(
+        string keyBase64,
+        string ivBase64,
+        CipherMode cipherMode,
+        PaddingMode paddingMode,
+        string expectedOriginalHash,
+        string expectedEncryptedHash)
     {
         // Arrange
         const string originalFileName = "SymmetricAlgorithms/File.xlsx";
         const string encryptedFileName = "SymmetricAlgorithms/EncryptedDES.xlsx";
         const string decryptedFileName = "SymmetricAlgorithms/DecryptedDES.xlsx";
-        var key = "cmjP+yg9d3Q=".FromBase64String();
-        var iv = "bFWtV5H1BDc=".FromBase64String();
+        var key = keyBase64.FromBase64String();
+        var iv = ivBase64.FromBase64String();
 
         // Act
         using var inputStream = File.OpenRead(originalFileName);
@@ -64,8 +102,8 @@ public class DESTests
         {
             inputStream
                 .UseDES(key)
-                .WithCipher(CipherMode.ECB)
-                .WithPadding(PaddingMode.PKCS7)
+                .WithCipher(cipherMode)
+                .WithPadding(paddingMode)
                 .WithIV(iv)
                 .Encrypt(outputStream);
         }
@@ -75,8 +113,8 @@ public class DESTests
         {
             inputStream2
                 .UseDES(key)
-                .WithCipher(CipherMode.ECB)
-                .WithPadding(PaddingMode.PKCS7)
+                .WithCipher(cipherMode)
+                .WithPadding(paddingMode)
                 .WithIV(iv)
                 .Decrypt(outputStream2);
         }
@@ -87,8 +125,8 @@ public class DESTests
 
         // Assert
         Assert.Equal(hashed1, hashed2);
-        Assert.Equal("E9BEF8A00841C82C52C35A512DAD8093", hashed1);
-        Assert.Equal("E9BEF8A00841C82C52C35A512DAD8093", hashed2);
-        Assert.Equal("37F4E82230402EEC16E1D26CB903CC73", hashed3);
+        Assert.Equal(expectedOriginalHash, hashed1);
+        Assert.Equal(expectedOriginalHash, hashed2);
+        Assert.Equal(expectedEncryptedHash, hashed3);
     }
 }
