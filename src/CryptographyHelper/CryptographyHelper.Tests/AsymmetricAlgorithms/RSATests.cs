@@ -37,6 +37,7 @@ public class RSATests
 
         // Assert
         Assert.Equal("supper secret text", decrypted.GetString());
+        Assert.Equal("supper secret text", "Qw3C1m2L4R77MYCh349/Lm+n5RrYpVZvmHxv+TH8OoNhzF0w0T35lhWWlm42ml9B384NVIgTL0V6wzNViBWxTv8Nbqw7QbQmIFytLaMaZkKq/XO/k6MGTwHNQCxrTgzMhpOkUUP7EUETmjULSHcerLmOO0Ni9NJVF2GYMR9tuB4=".FromBase64String().UseRSA(rsaPrivateKey).Decrypt().GetString());
     }
 
     [Fact]
@@ -54,6 +55,7 @@ public class RSATests
 
             // Assert
             Assert.Equal("supper secret text", decrypted.GetString());
+            Assert.Equal("supper secret text", "xlWlwufcf48gVuMO9YxcpPr4Y7Ko1aAQE5lEZCWnVtNaA6bigrS2PUxQ/NdEZHDNgs926D+VY2e//b0g2AwN6NKUKJopKdA4QJxH8AP7+EPPC8po6aB1peZCe+5RYvhC3Ax6C6FTdEVct0HDveQ+W+w3R/BHZC4NKX4VdBoCNf7nOaUlJ94bd162Ar7UlhT7AYg3TDg51Al/zGORx5t2r3EJnBRt9Lo9/mTkjP1M14qwYtsgb5S0PAqePSoB6vmNeMzN3ecXQnp/GkdjtZJ+Kew6GdB9VcoBcAcCwwdUfOWem6cQkDw6T1HHMvkjPhoS3ShjG2khcijX/o4+5xDkpA==".FromBase64String().UseRSA(cert).Decrypt().GetString());
         }
     }
 
@@ -94,13 +96,14 @@ public class RSATests
     {
         // Arrange
         var secret = "supper secret text".UseSha256().ComputeHash();
-        var cert = new X509Certificate2("AsymmetricAlgorithms/classifiedads.identityserver.pfx", "password1234");
+        var cert = X509CertificateLoader.LoadPkcs12FromFile("AsymmetricAlgorithms/classifiedads.identityserver.pfx", "password1234");
 
         // Act
         var signature = secret.UseRSA(cert).SignHash(HashAlgorithmName.SHA256);
         var verified = secret.UseRSA(cert).VerifyHash(signature, HashAlgorithmName.SHA256);
 
         // Assert
+        Assert.Equal("klXPjRjH+abAbWhqjEuZ37trrrEOaW8P46XCNXaHCy9c1QjC3gWQ2whsZcGoZH0MBWHgqbmourOGwMLHNT9b/t7NszOloYKwJwScb2CrHLjRE3McNUtlMA+BAxSkf8rEDHwISCUbsVfJK73L64AAqAYC6IbYeQeUWnUtGqBu+PoN72C4ugoiGzdMy4NFdAzmRHKcWfBp5T/mOFS5BdcgwPK59svHrfD4utiecph13dNdOYlN9gumox7PQN8fvCJnV6B+oKM64fQZH38/msvevG9O0mUFQvkJZ9BLNpTNVikUKnvgLkK7EjPPPUwAxmrVLR14jpbFijQjE5W/tYWt2g==", signature.ToBase64String());
         Assert.True(verified);
     }
 
@@ -125,13 +128,14 @@ public class RSATests
     {
         // Arrange
         var secret = "supper secret text";
-        var cert = new X509Certificate2("AsymmetricAlgorithms/classifiedads.identityserver.pfx", "password1234");
+        var cert = X509CertificateLoader.LoadPkcs12FromFile("AsymmetricAlgorithms/classifiedads.identityserver.pfx", "password1234");
 
         // Act
         var signature = secret.UseRSA(cert).SignData(HashAlgorithmName.SHA512);
         var verified = secret.UseRSA(cert).VerifyData(signature, HashAlgorithmName.SHA512);
 
         // Assert
+        Assert.Equal("WcyBiFivsj86d8iGHg9LG/Ya1AaDZMmnmq5iuMRJtRRqDNtolIRu+voiXiQOEnH5pGBXulu/VeqEgM8SXxfgEUXAWcFhL/fBzIuo08KJK/hGm7R+nENXwKD5UkY1SuZYNvhe4EQLZR1zNcOVICnZuXAWOo+PqOPz8+po1g/r0JT0UvWQbX6WimrgUtMRK1gl+FCHosDSfc4/JnnJm2efmr3riowU+3hvS3xwN0kyLGrlC60xpLrdQUxQtL+7ZeV+RUpIYEf62QyD4pOm9f4bh0hOG2H8kWcRP58I3oN5TROWRwoViDJD9q37QJ9t6TxiiR0tktRz+ErmC1FV8ldISg==", signature.ToBase64String());
         Assert.True(verified);
     }
 }

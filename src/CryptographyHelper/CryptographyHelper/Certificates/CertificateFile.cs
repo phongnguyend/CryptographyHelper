@@ -6,17 +6,14 @@ public class CertificateFile
 {
     public static X509Certificate2 Find(string fileName, string password = null, X509KeyStorageFlags? x509KeyStorageFlags = null)
     {
-        if (string.IsNullOrWhiteSpace(password))
+        if (X509Certificate2.GetCertContentType(fileName) != X509ContentType.Pkcs12)
         {
-            return new X509Certificate2(fileName);
+            return X509CertificateLoader.LoadCertificateFromFile(fileName);
         }
 
-        if (x509KeyStorageFlags.HasValue)
-        {
-            return new X509Certificate2(fileName, password, x509KeyStorageFlags.Value);
-        }
-
-        
-        return new X509Certificate2(fileName, password);
+        return X509CertificateLoader.LoadPkcs12FromFile(
+            fileName,
+            password,
+            x509KeyStorageFlags ?? X509KeyStorageFlags.DefaultKeySet);
     }
 }

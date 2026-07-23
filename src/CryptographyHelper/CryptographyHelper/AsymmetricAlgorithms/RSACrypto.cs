@@ -7,13 +7,13 @@ public class RSACrypto
 {
     public static string GenerateKey(int size = 1024)
     {
-        using var crypto = new RSACryptoServiceProvider(size);
+        using var crypto = RSA.Create(size);
         return crypto.ToXmlString(true);
     }
 
     public static string ExportPublicKey(string keyXml)
     {
-        using var crypto = new RSACryptoServiceProvider();
+        using var crypto = RSA.Create();
         crypto.FromXmlString(keyXml);
         return crypto.ToXmlString(false);
     }
@@ -28,7 +28,7 @@ public class RSACrypto
 
         if (format == KeyFormat.Xml)
         {
-            crypto = new RSACryptoServiceProvider();
+            crypto = RSA.Create();
             crypto.FromXmlString(key);
         }
         else if (format == KeyFormat.Pem)

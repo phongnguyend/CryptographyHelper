@@ -37,13 +37,11 @@ public class PBKDF2
 
     public byte[] GetBytes(int length)
     {
-        using var rfc2898 = GetRfc2898();
-        return rfc2898.GetBytes(length);
-    }
-
-
-    private Rfc2898DeriveBytes GetRfc2898()
-    {
-        return new Rfc2898DeriveBytes(_password, _salt, _iterations ?? 1000, _hashAlgorithm ?? HashAlgorithmName.SHA1);
+        return Rfc2898DeriveBytes.Pbkdf2(
+            _password,
+            _salt,
+            _iterations ?? 1000,
+            _hashAlgorithm ?? HashAlgorithmName.SHA1,
+            length);
     }
 }

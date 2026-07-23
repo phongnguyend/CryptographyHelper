@@ -84,8 +84,12 @@ public class AESTests
 
         var hashed1 = originalFileName.ToFileInfo().UseMd5().ComputeHashedString();
         var hashed2 = decryptedFileName.ToFileInfo().UseMd5().ComputeHashedString();
+        var hashed3 = encryptedFileName.ToFileInfo().UseMd5().ComputeHashedString();
 
         // Assert
         Assert.Equal(hashed1, hashed2);
+        Assert.Equal("E9BEF8A00841C82C52C35A512DAD8093", hashed1);
+        Assert.Equal("E9BEF8A00841C82C52C35A512DAD8093", hashed2);
+        Assert.Equal("37161FD25E7B4FDB229645656E80CB55", hashed3);
     }
 }

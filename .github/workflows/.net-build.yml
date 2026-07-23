@@ -19,12 +19,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
   
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 8.0.100
+        dotnet-version: 10.0.100
 
     - name: Test
       run: dotnet test CryptographyHelper.Tests/CryptographyHelper.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
@@ -33,7 +33,7 @@ jobs:
       run: dotnet build --configuration Release 
 
     - name: Upload CryptographyHelper
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: CryptographyHelper
         path: src/CryptographyHelper/CryptographyHelper/bin/Release/*.nupkg
