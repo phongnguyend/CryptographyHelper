@@ -16,6 +16,13 @@ public class AESTests
         CipherMode.ECB,
         PaddingMode.PKCS7,
         "NrKAB/j0THWXFjYbl+HSCA==")]
+    [InlineData(
+        "Text to encrypt 2",
+        "MeNFuKVG63Ks7dChmDvA67lSN6eKDE1QVuZT1dGCYlI=",
+        "bXhlXQwu0R9qMjbCfEo7GA==",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "HPYHJASjIZNcWO/Yo1gol6096cAPyFZ/0bTOnkydKRU=")]
     public void Encrypt(
         string original,
         string keyBase64,
@@ -48,6 +55,13 @@ public class AESTests
         CipherMode.ECB,
         PaddingMode.PKCS7,
         "Text to encrypt")]
+    [InlineData(
+        "HPYHJASjIZNcWO/Yo1gol6096cAPyFZ/0bTOnkydKRU=",
+        "MeNFuKVG63Ks7dChmDvA67lSN6eKDE1QVuZT1dGCYlI=",
+        "bXhlXQwu0R9qMjbCfEo7GA==",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "Text to encrypt 2")]
     public void Decrypt(
         string encryptedBase64,
         string keyBase64,

@@ -16,6 +16,13 @@ public class DESTests
         CipherMode.ECB,
         PaddingMode.PKCS7,
         "faa7hXl/f/UVa+/ox02gDQ==")]
+    [InlineData(
+        "Text to encrypt 2",
+        "cmjP+yg9d3Q=",
+        "bFWtV5H1BDc=",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "faa7hXl/f/VHoZ9ffQAS2z8j5tDuyQTQ")]
     public void Encrypt(
         string original,
         string keyBase64,
@@ -48,6 +55,13 @@ public class DESTests
         CipherMode.ECB,
         PaddingMode.PKCS7,
         "Text to encrypt")]
+    [InlineData(
+        "faa7hXl/f/VHoZ9ffQAS2z8j5tDuyQTQ",
+        "cmjP+yg9d3Q=",
+        "bFWtV5H1BDc=",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "Text to encrypt 2")]
     public void Decrypt(
         string encryptedBase64,
         string keyBase64,

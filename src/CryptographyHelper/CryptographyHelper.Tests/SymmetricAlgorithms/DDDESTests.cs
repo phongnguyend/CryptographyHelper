@@ -16,6 +16,13 @@ public class DDDESTests
         CipherMode.ECB,
         PaddingMode.PKCS7,
         "BMAQOzU6W/qAZBoRMlauWg==")]
+    [InlineData(
+        "Text to encrypt 2",
+        "e0x8U5MyotKHiY1uxqxurg==",
+        "Z1kmtPGvz1g=",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "BMAQOzU6W/qDBScpkdMgJ0/BafSVkfyT")]
     public void Encrypt(
         string original,
         string keyBase64,
@@ -48,6 +55,13 @@ public class DDDESTests
         CipherMode.ECB,
         PaddingMode.PKCS7,
         "Text to encrypt")]
+    [InlineData(
+        "BMAQOzU6W/qDBScpkdMgJ0/BafSVkfyT",
+        "e0x8U5MyotKHiY1uxqxurg==",
+        "Z1kmtPGvz1g=",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "Text to encrypt 2")]
     public void Decrypt(
         string encryptedBase64,
         string keyBase64,

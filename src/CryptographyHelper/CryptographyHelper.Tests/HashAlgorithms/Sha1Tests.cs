@@ -7,6 +7,7 @@ public class Sha1Tests
 {
     [Theory]
     [InlineData("Original Message to hash", "3882994BFCD293B6070D78A9DB0690E3BD18364F")]
+    [InlineData("Original Message to hash 2", "863659D05D5BDC0F1935D0A9CB5508BAEF909EAF")]
     public void HashString(string originalMessage, string expected)
     {
         // Act
@@ -18,6 +19,7 @@ public class Sha1Tests
 
     [Theory]
     [InlineData("Original Message to hash", "3882994BFCD293B6070D78A9DB0690E3BD18364F")]
+    [InlineData("Original Message to hash 2", "863659D05D5BDC0F1935D0A9CB5508BAEF909EAF")]
     public void HashBytes(string originalMessage, string expected)
     {
         // Arrange
@@ -32,6 +34,9 @@ public class Sha1Tests
 
     [Theory]
     [InlineData("Original Message to hash", "myscretekey", "75E1EF7CF7645DA619BF6A2594B64843DE6690BD")]
+    [InlineData("Original Message to hash 2", "myscretekey", "673B0D8E51EACA41542CFA476FFF24DAA7034A2F")]
+    [InlineData("Original Message to hash", "myscretekey2", "42DCEDECA15E5D081A76DC12F2D3495954D088DA")]
+    [InlineData("Original Message to hash 2", "myscretekey2", "9E52D8CE91090632D58AC07E8ED10DCE4F656B89")]
     public void HashStringWithKey(string originalMessage, string keyValue, string expected)
     {
         // Arrange
@@ -46,6 +51,9 @@ public class Sha1Tests
 
     [Theory]
     [InlineData("Original Message to hash", "myscretekey", "75E1EF7CF7645DA619BF6A2594B64843DE6690BD")]
+    [InlineData("Original Message to hash 2", "myscretekey", "673B0D8E51EACA41542CFA476FFF24DAA7034A2F")]
+    [InlineData("Original Message to hash", "myscretekey2", "42DCEDECA15E5D081A76DC12F2D3495954D088DA")]
+    [InlineData("Original Message to hash 2", "myscretekey2", "9E52D8CE91090632D58AC07E8ED10DCE4F656B89")]
     public void HashBytesWithKey(string originalMessage, string keyValue, string expected)
     {
         // Arrange
