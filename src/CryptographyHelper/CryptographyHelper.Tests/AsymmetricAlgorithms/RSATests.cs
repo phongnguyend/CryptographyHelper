@@ -102,6 +102,7 @@ public class RSATests
         var secret = "supper secret text";
         var rsaPrivateKey = RSACrypto.GenerateKey();
         var rsaPublicKey = RSACrypto.ExportPublicKey(rsaPrivateKey);
+        var differentRsaPrivateKey = RSACrypto.GenerateKey();
 
         // Act
         var encrypted = secret.UseRSA(rsaPublicKey).Encrypt();
@@ -109,6 +110,7 @@ public class RSATests
 
         // Assert
         Assert.Equal("supper secret text", decrypted.GetString());
+        Assert.Throws<CryptographicException>(() => encrypted.UseRSA(differentRsaPrivateKey).Decrypt());
     }
 
     [Fact]
@@ -118,13 +120,16 @@ public class RSATests
         var secret = "supper secret text".UseSha256().ComputeHash();
         var rsaPrivateKey = RSACrypto.GenerateKey();
         var rsaPublicKey = RSACrypto.ExportPublicKey(rsaPrivateKey);
+        var differentRsaPublicKey = RSACrypto.ExportPublicKey(RSACrypto.GenerateKey());
 
         // Act
         var signature = secret.UseRSA(rsaPrivateKey).SignHash(HashAlgorithmName.SHA256);
         var verified = secret.UseRSA(rsaPublicKey).VerifyHash(signature, HashAlgorithmName.SHA256);
+        var verifiedWithDifferentKey = secret.UseRSA(differentRsaPublicKey).VerifyHash(signature, HashAlgorithmName.SHA256);
 
         // Assert
         Assert.True(verified);
+        Assert.False(verifiedWithDifferentKey);
     }
 
     [Fact]
@@ -150,13 +155,16 @@ public class RSATests
         var secret = "supper secret text";
         var rsaPrivateKey = RSACrypto.GenerateKey();
         var rsaPublicKey = RSACrypto.ExportPublicKey(rsaPrivateKey);
+        var differentRsaPublicKey = RSACrypto.ExportPublicKey(RSACrypto.GenerateKey());
 
         // Act
         var signature = secret.UseRSA(rsaPrivateKey).SignData(HashAlgorithmName.SHA512);
         var verified = secret.UseRSA(rsaPublicKey).VerifyData(signature, HashAlgorithmName.SHA512);
+        var verifiedWithDifferentKey = secret.UseRSA(differentRsaPublicKey).VerifyData(signature, HashAlgorithmName.SHA512);
 
         // Assert
         Assert.True(verified);
+        Assert.False(verifiedWithDifferentKey);
     }
 
     [Fact]
