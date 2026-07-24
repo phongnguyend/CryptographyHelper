@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+    <File Path="notes.txt" />
+  </Folder>
+  <Project Path="CryptographyHelper.Tests/CryptographyHelper.Tests.csproj" />
+  <Project Path="CryptographyHelper/CryptographyHelper.csproj" />
+</Solution>

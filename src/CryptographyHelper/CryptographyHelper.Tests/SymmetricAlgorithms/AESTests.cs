@@ -8,56 +8,108 @@ namespace CryptographyHelper.Tests.SymmetricAlgorithms;
 
 public class AESTests
 {
-    [Fact]
-    public void Encrypt()
+    [Theory]
+    [InlineData(
+        "Text to encrypt",
+        "MeNFuKVG63Ks7dChmDvA67lSN6eKDE1QVuZT1dGCYlI=",
+        "bXhlXQwu0R9qMjbCfEo7GA==",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "NrKAB/j0THWXFjYbl+HSCA==")]
+    [InlineData(
+        "Text to encrypt 2",
+        "MeNFuKVG63Ks7dChmDvA67lSN6eKDE1QVuZT1dGCYlI=",
+        "bXhlXQwu0R9qMjbCfEo7GA==",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "HPYHJASjIZNcWO/Yo1gol6096cAPyFZ/0bTOnkydKRU=")]
+    public void Encrypt(
+        string original,
+        string keyBase64,
+        string ivBase64,
+        CipherMode cipherMode,
+        PaddingMode paddingMode,
+        string expected)
     {
         // Arrange
-        const string original = "Text to encrypt";
-        var key = "MeNFuKVG63Ks7dChmDvA67lSN6eKDE1QVuZT1dGCYlI=".FromBase64String();
-        var iv = "bXhlXQwu0R9qMjbCfEo7GA==".FromBase64String();
+        var key = keyBase64.FromBase64String();
+        var iv = ivBase64.FromBase64String();
 
         // Act
         var encrypted = original
             .UseAES(key)
-            .WithCipher(CipherMode.ECB)
-            .WithPadding(PaddingMode.PKCS7)
+            .WithCipher(cipherMode)
+            .WithPadding(paddingMode)
             .WithIV(iv)
             .Encrypt();
 
         // Assert
-        Assert.Equal("NrKAB/j0THWXFjYbl+HSCA==", encrypted.ToBase64String());
+        Assert.Equal(expected, encrypted.ToBase64String());
     }
 
-    [Fact]
-    public void Decrypt()
+    [Theory]
+    [InlineData(
+        "NrKAB/j0THWXFjYbl+HSCA==",
+        "MeNFuKVG63Ks7dChmDvA67lSN6eKDE1QVuZT1dGCYlI=",
+        "bXhlXQwu0R9qMjbCfEo7GA==",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "Text to encrypt")]
+    [InlineData(
+        "HPYHJASjIZNcWO/Yo1gol6096cAPyFZ/0bTOnkydKRU=",
+        "MeNFuKVG63Ks7dChmDvA67lSN6eKDE1QVuZT1dGCYlI=",
+        "bXhlXQwu0R9qMjbCfEo7GA==",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "Text to encrypt 2")]
+    public void Decrypt(
+        string encryptedBase64,
+        string keyBase64,
+        string ivBase64,
+        CipherMode cipherMode,
+        PaddingMode paddingMode,
+        string expected)
     {
         // Arrange
-        var encrypted = "NrKAB/j0THWXFjYbl+HSCA==".FromBase64String();
-        var key = "MeNFuKVG63Ks7dChmDvA67lSN6eKDE1QVuZT1dGCYlI=".FromBase64String();
-        var iv = "bXhlXQwu0R9qMjbCfEo7GA==".FromBase64String();
+        var encrypted = encryptedBase64.FromBase64String();
+        var key = keyBase64.FromBase64String();
+        var iv = ivBase64.FromBase64String();
 
         // Act
         var decrypted = encrypted
             .UseAES(key)
-            .WithCipher(CipherMode.ECB)
-            .WithPadding(PaddingMode.PKCS7)
+            .WithCipher(cipherMode)
+            .WithPadding(paddingMode)
             .WithIV(iv)
             .Decrypt();
 
         // Assert
-        Assert.Equal("Text to encrypt", decrypted.GetString());
+        Assert.Equal(expected, decrypted.GetString());
     }
 
 
-    [Fact]
-    public void EncryptDecryptFile()
+    [Theory]
+    [InlineData(
+        "MeNFuKVG63Ks7dChmDvA67lSN6eKDE1QVuZT1dGCYlI=",
+        "bXhlXQwu0R9qMjbCfEo7GA==",
+        CipherMode.ECB,
+        PaddingMode.PKCS7,
+        "E9BEF8A00841C82C52C35A512DAD8093",
+        "37161FD25E7B4FDB229645656E80CB55")]
+    public void EncryptDecryptFile(
+        string keyBase64,
+        string ivBase64,
+        CipherMode cipherMode,
+        PaddingMode paddingMode,
+        string expectedOriginalHash,
+        string expectedEncryptedHash)
     {
         // Arrange
         const string originalFileName = "SymmetricAlgorithms/File.xlsx";
         const string encryptedFileName = "SymmetricAlgorithms/EncryptedAES.xlsx";
         const string decryptedFileName = "SymmetricAlgorithms/DecryptedAES.xlsx";
-        var key = "MeNFuKVG63Ks7dChmDvA67lSN6eKDE1QVuZT1dGCYlI=".FromBase64String();
-        var iv = "bXhlXQwu0R9qMjbCfEo7GA==".FromBase64String();
+        var key = keyBase64.FromBase64String();
+        var iv = ivBase64.FromBase64String();
 
         // Act
         using var inputStream = File.OpenRead(originalFileName);
@@ -65,8 +117,8 @@ public class AESTests
         {
             inputStream
                 .UseAES(key)
-                .WithCipher(CipherMode.ECB)
-                .WithPadding(PaddingMode.PKCS7)
+                .WithCipher(cipherMode)
+                .WithPadding(paddingMode)
                 .WithIV(iv)
                 .Encrypt(outputStream);
         }
@@ -76,16 +128,20 @@ public class AESTests
         {
             inputStream2
                 .UseAES(key)
-                .WithCipher(CipherMode.ECB)
-                .WithPadding(PaddingMode.PKCS7)
+                .WithCipher(cipherMode)
+                .WithPadding(paddingMode)
                 .WithIV(iv)
                 .Decrypt(outputStream2);
         }
 
         var hashed1 = originalFileName.ToFileInfo().UseMd5().ComputeHashedString();
         var hashed2 = decryptedFileName.ToFileInfo().UseMd5().ComputeHashedString();
+        var hashed3 = encryptedFileName.ToFileInfo().UseMd5().ComputeHashedString();
 
         // Assert
         Assert.Equal(hashed1, hashed2);
+        Assert.Equal(expectedOriginalHash, hashed1);
+        Assert.Equal(expectedOriginalHash, hashed2);
+        Assert.Equal(expectedEncryptedHash, hashed3);
     }
 }
