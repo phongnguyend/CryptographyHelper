@@ -2,7 +2,6 @@
 using CryptographyHelper.Certificates;
 using CryptographyHelper.HashAlgorithms;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using Xunit;
 
 namespace CryptographyHelper.Tests.AsymmetricAlgorithms;
@@ -143,7 +142,7 @@ public class RSATests
     {
         // Arrange
         var secret = original.UseSha256().ComputeHash();
-        var cert = X509CertificateLoader.LoadPkcs12FromFile("AsymmetricAlgorithms/classifiedads.identityserver.pfx", "password1234");
+        var cert = CertificateFile.Find("AsymmetricAlgorithms/classifiedads.identityserver.pfx", "password1234");
 
         // Act
         var signature = secret.UseRSA(cert).SignHash(HashAlgorithmName.SHA256);
@@ -183,7 +182,7 @@ public class RSATests
     public void SignAndVerifyDataUsingCert(string original, string expected)
     {
         // Arrange
-        var cert = X509CertificateLoader.LoadPkcs12FromFile("AsymmetricAlgorithms/classifiedads.identityserver.pfx", "password1234");
+        var cert = CertificateFile.Find("AsymmetricAlgorithms/classifiedads.identityserver.pfx", "password1234");
 
         // Act
         var signature = original.UseRSA(cert).SignData(HashAlgorithmName.SHA512);
