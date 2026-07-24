@@ -132,11 +132,17 @@ public class RSATests
         Assert.False(verifiedWithDifferentKey);
     }
 
-    [Fact]
-    public void SignAndVerifyHashUsingCert()
+    [Theory]
+    [InlineData(
+        "supper secret text",
+        "klXPjRjH+abAbWhqjEuZ37trrrEOaW8P46XCNXaHCy9c1QjC3gWQ2whsZcGoZH0MBWHgqbmourOGwMLHNT9b/t7NszOloYKwJwScb2CrHLjRE3McNUtlMA+BAxSkf8rEDHwISCUbsVfJK73L64AAqAYC6IbYeQeUWnUtGqBu+PoN72C4ugoiGzdMy4NFdAzmRHKcWfBp5T/mOFS5BdcgwPK59svHrfD4utiecph13dNdOYlN9gumox7PQN8fvCJnV6B+oKM64fQZH38/msvevG9O0mUFQvkJZ9BLNpTNVikUKnvgLkK7EjPPPUwAxmrVLR14jpbFijQjE5W/tYWt2g==")]
+    [InlineData(
+        "supper secret text 2",
+        "ts30mD6NMNuDKAjInFOTRIzsfMxZyb3a2FFpXQpfR1rhYhQbxWuNa5Nwn5bjIPFJSlxLJ0DPCucnu8mMWADOYHktk6gFUCRJwiEZ7XOwEo1CnrCqsWYw4okuVyFC6NhtWYdwOFJKHH4IDtJjY2l2LREbOh9Rl6ZuITKeZLuKEYq6bXw+NvpO6/FaNo7d2YlnBiKgaReOYYHzE0dKEzBRb6hDXKvHsxmKP5XLRxli14XGYYMo+C/Ykaf4HnsUR7NevrgYDTNbb9hOY55+KA7sYePYif0PFsmuefXZeHc5SkPelqcpYWCFDCht5r/Wi3EMrg99iYeBL+JXFav0nY7oVg==")]
+    public void SignAndVerifyHashUsingCert(string original, string expected)
     {
         // Arrange
-        var secret = "supper secret text".UseSha256().ComputeHash();
+        var secret = original.UseSha256().ComputeHash();
         var cert = X509CertificateLoader.LoadPkcs12FromFile("AsymmetricAlgorithms/classifiedads.identityserver.pfx", "password1234");
 
         // Act
@@ -144,7 +150,7 @@ public class RSATests
         var verified = secret.UseRSA(cert).VerifyHash(signature, HashAlgorithmName.SHA256);
 
         // Assert
-        Assert.Equal("klXPjRjH+abAbWhqjEuZ37trrrEOaW8P46XCNXaHCy9c1QjC3gWQ2whsZcGoZH0MBWHgqbmourOGwMLHNT9b/t7NszOloYKwJwScb2CrHLjRE3McNUtlMA+BAxSkf8rEDHwISCUbsVfJK73L64AAqAYC6IbYeQeUWnUtGqBu+PoN72C4ugoiGzdMy4NFdAzmRHKcWfBp5T/mOFS5BdcgwPK59svHrfD4utiecph13dNdOYlN9gumox7PQN8fvCJnV6B+oKM64fQZH38/msvevG9O0mUFQvkJZ9BLNpTNVikUKnvgLkK7EjPPPUwAxmrVLR14jpbFijQjE5W/tYWt2g==", signature.ToBase64String());
+        Assert.Equal(expected, signature.ToBase64String());
         Assert.True(verified);
     }
 
@@ -167,19 +173,24 @@ public class RSATests
         Assert.False(verifiedWithDifferentKey);
     }
 
-    [Fact]
-    public void SignAndVerifyDataUsingCert()
+    [Theory]
+    [InlineData(
+        "supper secret text",
+        "WcyBiFivsj86d8iGHg9LG/Ya1AaDZMmnmq5iuMRJtRRqDNtolIRu+voiXiQOEnH5pGBXulu/VeqEgM8SXxfgEUXAWcFhL/fBzIuo08KJK/hGm7R+nENXwKD5UkY1SuZYNvhe4EQLZR1zNcOVICnZuXAWOo+PqOPz8+po1g/r0JT0UvWQbX6WimrgUtMRK1gl+FCHosDSfc4/JnnJm2efmr3riowU+3hvS3xwN0kyLGrlC60xpLrdQUxQtL+7ZeV+RUpIYEf62QyD4pOm9f4bh0hOG2H8kWcRP58I3oN5TROWRwoViDJD9q37QJ9t6TxiiR0tktRz+ErmC1FV8ldISg==")]
+    [InlineData(
+        "supper secret text 2",
+        "FAlhuS8bU0bYXs2VAEMEMuHrbb2jTKkzypEnrfW0LrqDndgeQmv6TusbGemVGcrEol4A018Lp7wsNLQZvsGKqvFo2iJ4SLUsXewHJNaffIMP3QsSKbaC//zSrEtupl9+kJTDeKNbzQkI0ek/d6kvzqE8RNaCgMDyW7MeBeiCU1jrSI88oIJwJRwJ4oqgzXM4Pne0UNAa/K809NVwyzOsaJMZE6UI9nDFjnZxRBo94nsK8JWuvmT1fqEzW/DLca9eeLJQUDwFeXi0iDtLZarLAbojOU/gmqr1QvrDYDRtrhA5PuAgICKcK1zRuNF97Z9/zgT3pJtl0GT+sH14/F5nTw==")]
+    public void SignAndVerifyDataUsingCert(string original, string expected)
     {
         // Arrange
-        var secret = "supper secret text";
         var cert = X509CertificateLoader.LoadPkcs12FromFile("AsymmetricAlgorithms/classifiedads.identityserver.pfx", "password1234");
 
         // Act
-        var signature = secret.UseRSA(cert).SignData(HashAlgorithmName.SHA512);
-        var verified = secret.UseRSA(cert).VerifyData(signature, HashAlgorithmName.SHA512);
+        var signature = original.UseRSA(cert).SignData(HashAlgorithmName.SHA512);
+        var verified = original.UseRSA(cert).VerifyData(signature, HashAlgorithmName.SHA512);
 
         // Assert
-        Assert.Equal("WcyBiFivsj86d8iGHg9LG/Ya1AaDZMmnmq5iuMRJtRRqDNtolIRu+voiXiQOEnH5pGBXulu/VeqEgM8SXxfgEUXAWcFhL/fBzIuo08KJK/hGm7R+nENXwKD5UkY1SuZYNvhe4EQLZR1zNcOVICnZuXAWOo+PqOPz8+po1g/r0JT0UvWQbX6WimrgUtMRK1gl+FCHosDSfc4/JnnJm2efmr3riowU+3hvS3xwN0kyLGrlC60xpLrdQUxQtL+7ZeV+RUpIYEf62QyD4pOm9f4bh0hOG2H8kWcRP58I3oN5TROWRwoViDJD9q37QJ9t6TxiiR0tktRz+ErmC1FV8ldISg==", signature.ToBase64String());
+        Assert.Equal(expected, signature.ToBase64String());
         Assert.True(verified);
     }
 }
