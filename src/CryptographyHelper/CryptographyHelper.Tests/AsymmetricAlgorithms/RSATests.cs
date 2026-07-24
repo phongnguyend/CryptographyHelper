@@ -110,7 +110,7 @@ public class RSATests
 
         // Assert
         Assert.Equal("supper secret text", decrypted.GetString());
-        Assert.Throws<CryptographicException>(() => encrypted.UseRSA(differentRsaPrivateKey).Decrypt());
+        Assert.ThrowsAny<CryptographicException>(() => encrypted.UseRSA(differentRsaPrivateKey).Decrypt());
     }
 
     [Fact]
