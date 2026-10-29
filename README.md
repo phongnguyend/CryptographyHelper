@@ -285,3 +285,7 @@ var cert = new X509Certificate2("path/to/cert.pfx", "password");
 
 byte[] signature = "super secret text".UseRSA(cert).SignData(HashAlgorithmName.SHA512);
 bool   verified  = "super secret text".UseRSA(cert).VerifyData(signature, HashAlgorithmName.SHA512);
+
+## Interactive playground
+
+Explore the library with the .NET 10 API and React 19 UI. See [setup and features](src/CryptographyHelper/PLAYGROUND.md).

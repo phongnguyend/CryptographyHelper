@@ -1,3 +1,8 @@
 src/CryptographyHelper/.vs/
 src/CryptographyHelper/*/bin/
 src/CryptographyHelper/*/obj/
+**/node_modules/
+**/dist/
+**/test-results/
+**/playwright-report/
+.playwright-mcp/

@@ -6,5 +6,6 @@
     <File Path="notes.txt" />
   </Folder>
   <Project Path="CryptographyHelper.Tests/CryptographyHelper.Tests.csproj" />
+  <Project Path="CryptographyHelper.Playground.Api/CryptographyHelper.Playground.Api.csproj" />
   <Project Path="CryptographyHelper/CryptographyHelper.csproj" />
 </Solution>
