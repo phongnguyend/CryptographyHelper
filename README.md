@@ -1,22 +1,6 @@
 # Nuget
 https://www.nuget.org/packages/CryptographyHelper
 
-# Cryptography Object Inheritance In .Net
-
-**Hash Algorithms:**
-
-![alt text](/docs/imgs/HashAlgorithm.png)
-
-**Symmetric Algorithms:**
-
-![alt text](/docs/imgs/SymmetricAlgorithm.png)
-
-**Asymmetric Algorithms:**
-
-![alt text](/docs/imgs/AsymmetricAlgorithm.png)
-
----
-
 ## Hash Algorithms
 
 Supports hashing data from a `string`, `byte[]`, `Stream`, or `FileInfo` using MD5, SHA-1, SHA-256, SHA-384, or SHA-512. An optional HMAC key can be provided via `.WithKey()`. Results can be retrieved as `byte[]`, a hex string, or a Base64 string.
@@ -285,6 +269,7 @@ var cert = new X509Certificate2("path/to/cert.pfx", "password");
 
 byte[] signature = "super secret text".UseRSA(cert).SignData(HashAlgorithmName.SHA512);
 bool   verified  = "super secret text".UseRSA(cert).VerifyData(signature, HashAlgorithmName.SHA512);
+```
 
 ## Interactive playground
 
