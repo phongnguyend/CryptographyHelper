@@ -1,10 +1,10 @@
 # CryptographyHelper playground
 
-Two local projects demonstrate the library: a .NET 10 minimal API and a React 19 / Vite UI with Lucide icons.
+Two local projects demonstrate the library: a .NET 11 minimal API and a React 19 / Vite UI with Lucide icons.
 
 ## Run
 
-Prerequisites: .NET 10 SDK and Node.js 22.12+ (Node 24 works).
+Prerequisites: .NET 11 SDK and Node.js 22.12+ (Node 24 works).
 
 From the repository root, start the API:
 

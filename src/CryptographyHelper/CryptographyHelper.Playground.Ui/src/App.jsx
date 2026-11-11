@@ -54,7 +54,7 @@ export default function App() {
   return <div className="shell">
     <aside><a className="brand" href="#"><span className="brand-icon"><FlaskConical size={23}/></span><span>Cryptography<span className="brand-light">Helper</span><small>THE PLAYGROUND</small></span></a>
       <div className="nav-label">EXPLORE THE LIBRARY</div><nav aria-label="Cryptography features">{tabs.map(t => <button key={t.id} aria-current={tab === t.id ? 'page' : undefined} className={tab === t.id ? 'active' : ''} onClick={() => setTab(t.id)}><t.icon size={19}/>{t.name}{tab === t.id && <ArrowRight size={15}/>}</button>)}</nav>
-      <div className="sidebar-note"><Braces size={22}/><strong>Learn by doing.</strong><p>Real library calls.<br/>Editable inputs.<br/>Instant feedback.</p><span>.NET 10 <i/> React 19</span></div>
+      <div className="sidebar-note"><Braces size={22}/><strong>Learn by doing.</strong><p>Real library calls.<br/>Editable inputs.<br/>Instant feedback.</p><span>.NET 11 <i/> React 19</span></div>
     </aside>
     <main><header><span><span className="status-dot"/> LOCAL PLAYGROUND</span><div className="header-actions"><span className="version">CryptographyHelper / v4</span><ThemeSwitcher/></div></header><Workspace key={tab} tab={tab}/><footer><FlaskConical size={15}/> A space to experiment. Use sample data and keys here.</footer></main>
   </div>;
