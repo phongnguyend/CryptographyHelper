@@ -5,9 +5,9 @@ namespace CryptographyHelper.SymmetricAlgorithms;
 
 public abstract class SymmetricCrypto
 {
-    public static byte[] GenerateKey(int length = 128)
+    public static byte[] GenerateKey(int lengthInBytes = 32)
     {
-        return RandomNumberGenerator.GetBytes(length);
+        return RandomNumberGenerator.GetBytes(lengthInBytes);
     }
 
     protected byte[] _bytes;

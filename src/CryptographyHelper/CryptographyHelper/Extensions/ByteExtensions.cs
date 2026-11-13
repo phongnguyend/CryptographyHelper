@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace CryptographyHelper;
@@ -16,22 +17,24 @@ public static class ByteExtensions
         return ret;
     }
 
+    /// <summary>
+    /// Compares byte contents in time that depends on their length, not their values.
+    /// Two null arrays are equal; a null array and a non-null array are not.
+    /// </summary>
+    public static bool FixedTimeEquals(this byte[] a, byte[] b)
+    {
+        if (a == null || b == null)
+        {
+            return a == null && b == null;
+        }
+
+        return CryptographicOperations.FixedTimeEquals(a, b);
+    }
+
+    [Obsolete("Use FixedTimeEquals instead. Calling array.Equals(other) uses reference equality, not this extension.")]
     public static bool Equals(this byte[] a, byte[] b)
     {
-        if (a == null && b == null)
-        {
-            return true;
-        }
-        if (a == null || b == null || a.Length != b.Length)
-        {
-            return false;
-        }
-        var areSame = true;
-        for (var i = 0; i < a.Length; i++)
-        {
-            areSame &= (a[i] == b[i]);
-        }
-        return areSame;
+        return FixedTimeEquals(a, b);
     }
 
     [Obsolete("Please use ToHexString(byte[]) instead")]
